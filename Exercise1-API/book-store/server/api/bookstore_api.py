@@ -65,8 +65,11 @@ def delete_book(book_id):
 
     books.remove(book)
     return make_response(
+        # RFC9110.:
+        # All 1xx (Informational), 204 (No Content), and 304 (Not Modified)
+        # responses do not include content
         jsonify({'message': 'Book deleted successfully'}), 204)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
