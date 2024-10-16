@@ -1,0 +1,26 @@
+FROM python:3.10.6-slim
+
+USER root
+
+WORKDIR /code
+
+RUN apt-get update
+RUN python3 -m pip install poetry
+
+COPY poetry.lock poetry.toml pyproject.toml /code/
+# Add poetry to the path
+ENV PATH="${PATH}:/root/.local/bin"
+
+# Without creating a virtual environment as we are using a docker container
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-interaction --no-ansi --no-root
+
+COPY  api /code/api/
+
+EXPOSE 5000
+
+# Set environment variables for Flask
+ENV FLASK_APP=api/bookstore_api.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+ENTRYPOINT ["poetry", "run", "python", "api/bookstore_api.py"]
