@@ -12,10 +12,8 @@ RUN pip install --upgrade pip --break-system-packages
 RUN pip install pytest --break-system-packages
 RUN pip install pytest-html --break-system-packages
 RUN pip install requests --break-system-packages
-# Install docker and docker compose
+# Install docker
 RUN curl https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar xvz -C /tmp/ && mv /tmp/docker/docker /usr/bin/docker
-#RUN curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-#RUN chmod 755 /usr/local/bin/docker-compose
 
 COPY configuration /code/configuration
 COPY datasets /code/datasets
