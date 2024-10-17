@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HOST = "unix:///var/run/docker.sock"  // Use host's Docker
+    }
+
+    stages {
+    
+        stage('Checkout server code') {
+            steps {
+                checkout scm
+            }
+        }
+        
+  
+        stage('Deploy Server Container') {
+            steps {
+                script {
+                    // Deploy the bookstore API on the host Docker
+                        sh '''
+                        echo "Removing docker container"
+                        docker stop bookstoreserver  || true
+                        dockerid=$(docker ps -aqf "name=bookstoreserver")
+                        # Continue even if fails
+                        docker rm $dockerid || true
+                        
+                        echo "Remove dangling images"
+                        y | docker image prune
+                        
+                        echo "Updating docker image"
+                        cd Exercise1-API/book-store/server
+                        docker build -t bookstoreimage . -f DockerfileServer
+                        
+                        echo "Run container"
+                        docker run -d --name bookstoreserver -p 5000:5000 bookstoreimage
+                        
+                        echo "Sleeping for 30 seconds"
+                        sleep 30
+                        '''
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                script {
+                    // Run pytest, output results in JUnit XML format
+                    catchError {
+                    sh '''
+                        cd Exercise1-API/book-store/test/test_suite/
+                        python3 -m pytest --junitxml=report.xml
+                        cp *.xml $WORKSPACE
+                    '''
+                    }
+                    
+                }
+            }
+        }
+
+        stage('Publish Test Results') {
+            steps {
+                // Publish the pytest results (JUnit XML format)
+                junit 'report.xml'
+            }
+        }
+    }
+
+}
