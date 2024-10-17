@@ -56,6 +56,6 @@
   </sources>
   <factory class="org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory">
     <owner class="org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject" reference="../.."/>
-    <scriptPath>Exercise1-API/book-store/test/test_environment/JenkinsFile</scriptPath>
+    <scriptPath>Exercise1-API/book-store/test_environment/JenkinsFile</scriptPath>
   </factory>
 </org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject>
