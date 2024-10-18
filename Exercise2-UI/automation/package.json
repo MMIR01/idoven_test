@@ -1,0 +1,11 @@
+{
+    "name": "cypress-speed-automation",
+    "version": "1.0.0",
+    "description": "Cypress scripts to test Speed Test Website UI",
+    "main": "cypress.config.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+}
